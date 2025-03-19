@@ -3,7 +3,6 @@
 #include <time.h>
 #include <string.h>
 
-// Définition des énumérations et de la structure date
 typedef enum
 {
    MON = 1,
@@ -38,7 +37,6 @@ typedef struct
    int year : 20;
 } date;
 
-// 1. Fonction pour renvoyer le nom du jour
 char *dayname_str(dayname day)
 {
    switch (day)
@@ -62,7 +60,6 @@ char *dayname_str(dayname day)
    }
 }
 
-// 2. Fonction pour renvoyer le nom du mois
 char *monthname_str(monthname month)
 {
    switch (month)
@@ -96,62 +93,44 @@ char *monthname_str(monthname month)
    }
 }
 
-// 3. Fonction pour renvoyer le jour de la semaine correspondant à une date en secondes depuis l'epoch
+// 3
 dayname weekday(time_t when)
 {
-   struct tm *tm = localtime(&when);
-   if (tm == NULL)
-   {
-      return MON; // Valeur par défaut en cas d'erreur
-   }
-   return (dayname)(tm->tm_wday == 0 ? 7 : tm->tm_wday); // tm_wday : 0 (dimanche) à 6 (samedi)
+   int days = when/86400;
+   int day = (days + 4) %7;
+   return day == 0 ? 7 : (dayname)day;
 }
 
-// 4. Fonction pour vérifier si une année est bissextile
 int leapyear(unsigned int year)
 {
    return (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
 }
 
-// 5. Fonction pour convertir un time_t en date
 date from_time(time_t when)
 {
-   struct tm *tm = localtime(&when);
+   struct tm *tminfo = localtime(&when);
    date d;
 
-   if (tm == NULL)
-   {
-      // En cas d'erreur, retourne une date par défaut
-      d.weekday = MON;
-      d.day = 1;
-      d.month = JAN;
-      d.year = 1970;
-      return d;
-   }
 
-   d.weekday = (dayname)(tm->tm_wday == 0 ? 7 : tm->tm_wday); // Conversion en dayname
-   d.day = tm->tm_mday;
-   d.month = (monthname)(tm->tm_mon + 1); // tm_mon : 0 (janvier) à 11 (décembre)
-   d.year = tm->tm_year + 1900;           // tm_year : années depuis 1900
+   d.weekday = weekday(when);
+   d.day = tminfo->tm_mday;
+   d.month = (monthname)(tminfo->tm_mon + 1);
+   d.year = tminfo->tm_year + 1900;
 
    return d;
 }
 
-// 6. Fonction main pour afficher la date du jour
-int main()
+int main(void)
 {
    // Obtenir le temps actuel
    time_t now = time(NULL);
    if (now == -1)
    {
-      perror("time");
       return 1;
    }
 
-   // Convertir en date
    date today = from_time(now);
 
-   // Afficher la date
    printf("Today is %s, %d %s %d\n",
           dayname_str(today.weekday),
           today.day,

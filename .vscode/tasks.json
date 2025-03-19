@@ -1,0 +1,26 @@
+{
+  "tasks": [
+    {
+      "type": "cppbuild",
+      "label": "C Build",
+      "command": "/usr/bin/gcc",
+      "args": [
+        "-std=c11",              // Essential for atomic operations
+        "-Wall",
+        "-g",
+        "${file}",
+        "-o",
+        "${fileDirname}/${fileBasenameNoExtension}"
+      ],
+      "options": {
+        "cwd": "/usr/bin"
+      },
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ],
+  "version": "2.0.0"
+}

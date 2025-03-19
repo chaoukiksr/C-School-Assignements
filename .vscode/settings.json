@@ -1,0 +1,8 @@
+{
+  "C_Cpp.default.includePath": [
+    "/usr/include",
+    "/usr/local/include"
+  ],
+  "C_Cpp.default.cppStandard": "c11",
+  "C_Cpp.errorSquiggles": "Enabled"
+}

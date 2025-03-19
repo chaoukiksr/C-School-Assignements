@@ -60,6 +60,8 @@ int get_col(void)
       {
          return ch - 'A';
       }
+
+      ch = getch();
    }
    return -1;
 }
@@ -211,12 +213,9 @@ bool check_top_left_bottom_right_diagonal_win(int row, int col)
 
 bool check_Win(int row, int col)
 {
-   if (check_horizontal_win(row, col) ||
-       check_Vertical_win(row, col) || check_top_left_bottom_right_diagonal_win(row, col) || check_top_right_bottom_left_diagonal_win(row, col))
-   {
-      return true;
-   }
-   return false;
+   return (check_horizontal_win(row, col) ||
+           check_Vertical_win(row, col) ||
+           check_top_left_bottom_right_diagonal_win(row, col) || check_top_right_bottom_left_diagonal_win(row, col));
 }
 
 int game_over(void)
@@ -227,9 +226,8 @@ int game_over(void)
       {
          if (board[i][j] != ' ')
          {
-
             char chip = board[i][j];
-            if (check_Win(i, j))
+            if (board[i][j] != ' ' && check_Win(i, j))
             {
                return (int)chip;
             }
@@ -245,6 +243,7 @@ int game_over(void)
       return 0;
    }
 }
+
 void play(void)
 {
 
